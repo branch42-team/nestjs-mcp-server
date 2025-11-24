@@ -70,3 +70,6 @@ docs/.vuepress/dist
 
 src/tmp/**/*
 !src/tmp/.gitkeep
+
+# local docs
+docs/**/*
