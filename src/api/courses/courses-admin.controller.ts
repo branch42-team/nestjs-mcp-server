@@ -1,8 +1,11 @@
 import { Role } from '@/api/user/user.enum';
 import { AuthGuard } from '@/auth/auth.guard';
+import { Job, Queue } from '@/constants/job.constant';
 import { Roles } from '@/decorators/auth/roles.decorator';
 import { RolesGuard } from '@/decorators/auth/roles.guard';
 import { ApiAuth } from '@/decorators/http.decorators';
+import { EmbeddingQueueService } from '@/worker/queues/embedding/embedding.service';
+import { InjectQueue } from '@nestjs/bullmq';
 import {
   Body,
   Controller,
@@ -17,6 +20,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { Queue as QueueType } from 'bullmq';
 import { CoursesService } from './courses.service';
 import {
   CourseDetailDto,
@@ -47,7 +51,12 @@ import { EnrollUserDto, EnrollmentDto } from './dto/enrollment.dto';
 @UseGuards(AuthGuard, RolesGuard)
 @Roles(Role.Admin)
 export class CoursesAdminController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    @InjectQueue(Queue.Embedding)
+    private readonly embeddingQueue: QueueType,
+    private readonly embeddingQueueService: EmbeddingQueueService,
+  ) {}
 
   // ==================== Course Management ====================
 
@@ -285,5 +294,97 @@ export class CoursesAdminController {
     @Param('enrollmentId', ParseUUIDPipe) enrollmentId: string,
   ): Promise<void> {
     return this.coursesService.unenrollUser(enrollmentId);
+  }
+
+  // ==================== Embedding Management ====================
+
+  @ApiAuth({
+    summary: 'Trigger reindexing for a specific course',
+    description:
+      'Queue embedding generation for all lessons in a course. Useful after bulk content updates.',
+    errorResponses: [400, 401, 403, 404, 500],
+  })
+  @ApiParam({ name: 'courseId', type: 'string', description: 'Course ID' })
+  @Post(':courseId/reindex')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async reindexCourse(
+    @Param('courseId', ParseUUIDPipe) courseId: string,
+  ): Promise<{ message: string; jobId: string }> {
+    const job = await this.embeddingQueue.add(
+      Job.Embedding.EmbedCourse,
+      { courseId, forceReindex: true },
+      { removeOnComplete: false, removeOnFail: false },
+    );
+
+    return {
+      message: `Reindexing job queued for course ${courseId}`,
+      jobId: job.id!,
+    };
+  }
+
+  @ApiAuth({
+    summary: 'Get embedding statistics',
+    description:
+      'Returns statistics about embedding coverage and processing status',
+    errorResponses: [401, 403, 500],
+  })
+  @Get('embeddings/stats')
+  async getEmbeddingStats(): Promise<{
+    totalEmbeddings: number;
+    totalLessons: number;
+    lessonsWithEmbeddings: number;
+    averageChunksPerLesson: number;
+    coveragePercentage: number;
+  }> {
+    const stats = await this.embeddingQueueService.getEmbeddingStats();
+    return {
+      ...stats,
+      coveragePercentage:
+        stats.totalLessons > 0
+          ? (stats.lessonsWithEmbeddings / stats.totalLessons) * 100
+          : 0,
+    };
+  }
+
+  @ApiAuth({
+    summary: 'Clear embeddings for a specific lesson',
+    description:
+      'Delete all embeddings for a lesson. Useful for troubleshooting.',
+    errorResponses: [400, 401, 403, 404, 500],
+  })
+  @ApiParam({ name: 'lessonId', type: 'string', description: 'Lesson ID' })
+  @Delete('embeddings/lessons/:lessonId')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async clearLessonEmbeddings(
+    @Param('lessonId', ParseUUIDPipe) lessonId: string,
+  ): Promise<void> {
+    // The deletion will happen automatically via cascade when we delete the embeddings
+    // But we can also manually trigger it here
+    await this.embeddingQueue.add(
+      Job.Embedding.EmbedLesson,
+      { lessonId, forceReindex: true },
+      { removeOnComplete: true, removeOnFail: false },
+    );
+  }
+
+  @ApiAuth({
+    summary: 'Trigger full system reindex',
+    description:
+      'Queue embedding generation for all lessons. This is a heavy operation.',
+    errorResponses: [401, 403, 500],
+  })
+  @Post('embeddings/reindex-all')
+  @HttpCode(HttpStatus.ACCEPTED)
+  async reindexAll(): Promise<{ message: string; jobId: string }> {
+    const job = await this.embeddingQueue.add(
+      Job.Embedding.ReindexAll,
+      { forceReindex: false, batchSize: 100 },
+      { removeOnComplete: false, removeOnFail: false },
+    );
+
+    return {
+      message: 'Full reindex job queued',
+      jobId: job.id!,
+    };
   }
 }

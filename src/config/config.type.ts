@@ -1,6 +1,7 @@
 import { AuthConfig } from '@/config/auth/auth-config.type';
 import { AwsConfig } from '@/config/aws/aws-config.types';
 import { DatabaseConfig } from '@/config/database/database-config.type';
+import { EmbeddingConfig } from '@/config/embedding/embedding-config.type';
 import { GrafanaConfig } from '@/config/grafana/grafana.type';
 import { MailConfig } from '@/config/mail/mail-config.type';
 import { RedisConfig } from '@/config/redis/redis-config.type';
@@ -20,4 +21,5 @@ export type GlobalConfig = {
   throttler: ThrottlerConfig;
   aws: AwsConfig;
   grafana: GrafanaConfig;
+  embedding: EmbeddingConfig;
 };

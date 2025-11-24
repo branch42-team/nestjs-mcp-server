@@ -1,10 +1,12 @@
+import { Job, Queue } from '@/constants/job.constant';
+import { InjectQueue } from '@nestjs/bullmq';
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Queue as QueueType } from 'bullmq';
 import { Repository } from 'typeorm';
 import {
   CourseDetailDto,
@@ -44,6 +46,8 @@ export class CoursesService {
     private lessonRepository: Repository<LessonEntity>,
     @InjectRepository(EnrollmentEntity)
     private enrollmentRepository: Repository<EnrollmentEntity>,
+    @InjectQueue(Queue.Embedding)
+    private embeddingQueue: QueueType,
   ) {}
 
   // ==================== Course Management ====================
@@ -190,6 +194,14 @@ export class CoursesService {
     });
 
     const saved = await this.lessonRepository.save(lesson);
+
+    // Queue embedding job for the new lesson
+    await this.embeddingQueue.add(
+      Job.Embedding.EmbedLesson,
+      { lessonId: saved.id, forceReindex: false },
+      { removeOnComplete: true, removeOnFail: false },
+    );
+
     return saved.toDto(LessonDto);
   }
 
@@ -218,8 +230,24 @@ export class CoursesService {
       throw new NotFoundException(`Lesson with ID ${id} not found`);
     }
 
+    // Check if content-related fields are being updated
+    const contentFieldsUpdated =
+      dto.title !== undefined ||
+      dto.description !== undefined ||
+      dto.content !== undefined;
+
     Object.assign(lesson, dto);
     const updated = await this.lessonRepository.save(lesson);
+
+    // Queue re-embedding job if content changed
+    if (contentFieldsUpdated) {
+      await this.embeddingQueue.add(
+        Job.Embedding.EmbedLesson,
+        { lessonId: updated.id, forceReindex: true },
+        { removeOnComplete: true, removeOnFail: false },
+      );
+    }
+
     return updated.toDto(LessonDto);
   }
 

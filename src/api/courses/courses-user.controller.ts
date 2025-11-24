@@ -5,15 +5,14 @@ import {
   Body,
   Controller,
   Get,
-  HttpCode,
-  HttpStatus,
   Param,
   ParseUUIDPipe,
-  Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { CoursesRagService } from './courses-rag.service';
 import { CoursesService } from './courses.service';
 import { CourseDetailDto, CourseDto, LessonDto } from './dto/course.dto';
 import {
@@ -33,7 +32,10 @@ import {
 })
 @UseGuards(AuthGuard)
 export class CoursesUserController {
-  constructor(private readonly coursesService: CoursesService) {}
+  constructor(
+    private readonly coursesService: CoursesService,
+    private readonly ragService: CoursesRagService,
+  ) {}
 
   // ==================== Course Browsing ====================
 
@@ -41,8 +43,55 @@ export class CoursesUserController {
     summary: 'Get all active courses',
     type: CourseDto,
   })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search courses by content using semantic search',
+    type: String,
+  })
   @Get()
-  async getActiveCourses(): Promise<CourseDto[]> {
+  async getActiveCourses(
+    @Query('search') search?: string,
+  ): Promise<CourseDto[]> {
+    // If search query is provided, use semantic search
+    if (search) {
+      const searchResults = await this.ragService.semanticSearch(
+        search,
+        {},
+        20,
+      );
+
+      // Extract unique lesson IDs from search results
+      const lessonIds = Array.from(
+        new Set(searchResults.map((r) => r.lessonId)),
+      );
+
+      if (lessonIds.length === 0) {
+        return [];
+      }
+
+      // Get all active courses and check which ones contain matching lessons
+      const allCourses = await this.coursesService.getActiveCourses();
+
+      // Filter courses that have matching lessons
+      const matchingCourses: CourseDto[] = [];
+      for (const course of allCourses) {
+        const courseDetail = await this.coursesService.getCourse(course.id);
+        const hasMatchingLesson = courseDetail.modules?.some((module) =>
+          (module as any).lessons?.some((lesson: any) =>
+            lessonIds.includes(lesson.id),
+          ),
+        );
+
+        if (hasMatchingLesson) {
+          matchingCourses.push(course);
+        }
+      }
+
+      return matchingCourses;
+    }
+
+    // Default behavior without search
     return this.coursesService.getActiveCourses();
   }
 
