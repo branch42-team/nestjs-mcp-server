@@ -4,7 +4,13 @@ import { CacheService } from '@/shared/cache/cache.service';
 import { validateUsername } from '@/utils/validators/username';
 import { ConfigService } from '@nestjs/config';
 import { APIError } from 'better-auth/api';
-import { magicLink, openAPI, twoFactor, username } from 'better-auth/plugins';
+import {
+  admin,
+  magicLink,
+  openAPI,
+  twoFactor,
+  username,
+} from 'better-auth/plugins';
 import { passkey } from 'better-auth/plugins/passkey';
 import { BetterAuthOptions, BetterAuthPlugin } from 'better-auth/types';
 import { Pool } from 'pg';
@@ -48,10 +54,19 @@ export function getConfig({
     passkey({
       rpName: appConfig.name,
     }),
+    admin({
+      impersonationSessionDuration: 60 * 60, // 1 hour
+      defaultBanReason: 'Violation of terms of service',
+      defaultBanExpiresIn: undefined, // Permanent ban by default
+    }),
   ];
 
   // Plugins for development only
-  const nonProdPlugins = [openAPI()];
+  const nonProdPlugins = [
+    openAPI({
+      path: '/swagger',
+    }),
+  ];
   if (appConfig.nodeEnv !== 'production') {
     plugins.push(...nonProdPlugins);
   }

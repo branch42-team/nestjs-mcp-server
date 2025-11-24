@@ -6,6 +6,10 @@ services:
     volumes:
       - /app/node_modules
       - .:/app
+    environment:
+      - DATABASE_HOST=database
+      - REDIS_HOST=redis
+      - MAIL_HOST=mail
     depends_on:
       - database
       - redis
@@ -20,6 +24,10 @@ services:
     volumes:
       - /app/node_modules
       - .:/app
+    environment:
+      - DATABASE_HOST=database
+      - REDIS_HOST=redis
+      - MAIL_HOST=mail
     depends_on:
       - database
       - redis
@@ -27,7 +35,7 @@ services:
       sh -c "pnpm start:dev"
 
   database:
-    image: postgres:16
+    image: postgres:17.7
     container_name: assignment-postgres
     restart: unless-stopped
     environment:

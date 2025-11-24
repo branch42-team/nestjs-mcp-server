@@ -2,7 +2,12 @@ ARG NODE_IMAGE=node:20-slim
 
 FROM ${NODE_IMAGE} AS base
 
-RUN apt-get update && apt-get install -y procps
+RUN apt-get update && apt-get install -y \
+    procps \
+    python3 \
+    make \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN npm install -g pnpm@9.12.2
 

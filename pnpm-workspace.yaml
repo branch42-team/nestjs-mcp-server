@@ -1,0 +1,12 @@
+packages:
+  - '.'
+
+onlyBuiltDependencies:
+  - '@apollo/protobufjs'
+  - '@nestjs/core'
+  - '@swc/core'
+  - bufferutil
+  - esbuild
+  - msgpackr-extract
+  - nestjs-pino
+  - sharp
