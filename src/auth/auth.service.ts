@@ -1,3 +1,4 @@
+import { Role } from '@/api/user/user.enum';
 import { GlobalConfig } from '@/config/config.type';
 import { Queue } from '@/constants/job.constant';
 import { CacheService } from '@/shared/cache/cache.service';
@@ -121,6 +122,31 @@ export class AuthService {
     );
     return {
       Authorization: `Basic ${base64Credential}`,
+    };
+  }
+
+  /**
+   * Changes a user's role to admin by their email address
+   */
+  async changeRoleToAdmin(email: string) {
+    const user = await this.userRepository.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found.');
+    }
+
+    // Update the user's role to Admin
+    user.role = Role.Admin;
+    await this.userRepository.save(user);
+
+    return {
+      message: 'User role successfully updated to admin',
+      userId: user.id,
+      role: user.role as Role,
     };
   }
 }

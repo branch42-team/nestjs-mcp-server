@@ -1,3 +1,4 @@
+import { Role } from '@/api/user/user.enum';
 import {
   BooleanFieldOptional,
   EmailField,
@@ -7,7 +8,6 @@ import {
 } from '@/decorators/field.decorators';
 import { ApiProperty } from '@nestjs/swagger';
 import { Exclude, Expose } from 'class-transformer';
-import { IsEmail, IsString, MaxLength, MinLength } from 'class-validator';
 
 // Sign Up DTOs
 export class SignUpEmailDto {
@@ -202,4 +202,27 @@ export class MessageResponseDto {
   @ApiProperty({ description: 'Success status', type: Boolean })
   @Expose()
   success: boolean;
+}
+
+// Change Role DTOs
+export class ChangeRoleDto {
+  @EmailField({
+    description: 'The email address of the user to change role to admin',
+  })
+  email: string;
+}
+
+@Exclude()
+export class ChangeRoleResponseDto {
+  @ApiProperty({ description: 'Success message' })
+  @Expose()
+  message: string;
+
+  @ApiProperty({ description: 'User ID of the updated user' })
+  @Expose()
+  userId: string;
+
+  @ApiProperty({ description: 'New role assigned to the user' })
+  @Expose()
+  role: Role;
 }
