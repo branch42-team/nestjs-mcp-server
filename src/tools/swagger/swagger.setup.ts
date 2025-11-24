@@ -1,4 +1,5 @@
 import { type GlobalConfig } from '@/config/config.type';
+import { SWAGGER_PATH } from '@/constants/app.constant';
 import { type INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
@@ -53,7 +54,7 @@ The Better Auth documentation provides interactive API reference for all authent
 
   // Use Scalar API Reference instead of default Swagger UI
   app.use(
-    '/swagger',
+    SWAGGER_PATH,
     apiReference({
       spec: {
         content: document,

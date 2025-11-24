@@ -22,12 +22,12 @@ import { AppModule } from './app.module';
 import { getConfig as getAppConfig } from './config/app/app.config';
 import { BULL_BOARD_PATH } from './config/bull/bull.config';
 import { type GlobalConfig } from './config/config.type';
-import { Environment } from './constants/app.constant';
+import { Environment, SWAGGER_PATH } from './constants/app.constant';
 import { SentryInterceptor } from './interceptors/sentry.interceptor';
 import { basicAuthMiddleware } from './middlewares/basic-auth.middleware';
 import { RedisIoAdapter } from './shared/socket/redis.adapter';
 import { consoleLoggingConfig } from './tools/logger/logger-factory';
-import setupSwagger, { SWAGGER_PATH } from './tools/swagger/swagger.setup';
+import setupSwagger from './tools/swagger/swagger.setup';
 
 async function bootstrap() {
   const envToLogger: Record<`${Environment}`, any> = {
