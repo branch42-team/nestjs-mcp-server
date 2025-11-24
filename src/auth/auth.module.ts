@@ -34,7 +34,6 @@ import type {
   FastifyReply as Reply,
   FastifyRequest as Request,
 } from 'fastify';
-import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { BetterAuthService } from './better-auth.service';
 import { UserEntity } from './entities/user.entity';
@@ -57,7 +56,6 @@ const HOOKS = [
     }),
     TypeOrmModule.forFeature([UserEntity]),
   ],
-  controllers: [AuthController],
   providers: [AuthService],
   exports: [AuthService],
 })

@@ -62,7 +62,11 @@ export function getConfig({
   ];
 
   // Plugins for development only
-  const nonProdPlugins = [openAPI()];
+  const nonProdPlugins = [
+    openAPI({
+      path: '/swagger',
+    }),
+  ];
   if (appConfig.nodeEnv !== 'production') {
     plugins.push(...nonProdPlugins);
   }

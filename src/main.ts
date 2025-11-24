@@ -99,10 +99,15 @@ async function bootstrap() {
       contentSecurityPolicy: {
         directives: {
           defaultSrc: ["'self'"],
-          scriptSrc: [
+          scriptSrc: ["'self'", "'unsafe-inline'", 'https://cdn.jsdelivr.net'],
+          styleSrc: [
             "'self'",
-            'https://cdn.jsdelivr.net/npm/@scalar/api-reference', // For Better Auth API Reference.
+            "'unsafe-inline'",
+            'https://fonts.googleapis.com',
           ],
+          fontSrc: ["'self'", 'https://fonts.gstatic.com'],
+          imgSrc: ["'self'", 'data:', 'https:'],
+          connectSrc: ["'self'"],
         },
       },
     }),
