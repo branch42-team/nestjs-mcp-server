@@ -19,5 +19,5 @@ jobs:
           command_timeout: 20m
           script_stop: true
           script: |
-            cd ~/nestjs-boilerplate
+            cd ~/assignment
             ./bin/deploy.sh
