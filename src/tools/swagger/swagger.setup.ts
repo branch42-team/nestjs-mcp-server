@@ -1,10 +1,9 @@
 import { type GlobalConfig } from '@/config/config.type';
+import { SWAGGER_PATH } from '@/constants/app.constant';
 import { type INestApplication } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, OpenAPIObject, SwaggerModule } from '@nestjs/swagger';
 import { apiReference } from '@scalar/nestjs-api-reference';
-
-export const SWAGGER_PATH = '/swagger';
 
 function setupSwagger(app: INestApplication): OpenAPIObject {
   const configService = app.get(ConfigService<GlobalConfig>);

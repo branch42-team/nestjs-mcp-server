@@ -1,8 +1,8 @@
 import { AuthService } from '@/auth/auth.service';
 import { ErrorDto } from '@/common/dto/error.dto';
 import { GlobalConfig } from '@/config/config.type';
+import { SWAGGER_PATH } from '@/constants/app.constant';
 import { Public } from '@/decorators/public.decorator';
-import { SWAGGER_PATH } from '@/tools/swagger/swagger.setup';
 import { Serialize } from '@/utils/interceptors/serialize';
 import { Controller, Get, HttpStatus } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
