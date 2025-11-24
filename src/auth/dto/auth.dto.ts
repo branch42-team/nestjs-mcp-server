@@ -222,7 +222,11 @@ export class ChangeRoleResponseDto {
   @Expose()
   userId: string;
 
-  @ApiProperty({ description: 'New role assigned to the user' })
+  @ApiProperty({
+    description: 'New role assigned to the user',
+    enum: Role,
+    enumName: 'Role',
+  })
   @Expose()
   role: Role;
 }
