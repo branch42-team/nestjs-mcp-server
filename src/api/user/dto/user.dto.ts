@@ -22,11 +22,11 @@ export class UserDto {
 
   @EnumField(() => Role)
   @Expose()
-  role: Role;
+  role: string;
 
-  @StringField()
+  @StringFieldOptional()
   @Expose()
-  username: string;
+  username?: string;
 
   @StringField()
   @Expose()
