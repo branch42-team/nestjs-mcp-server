@@ -36,13 +36,13 @@ import {
   UpdateModuleDto,
 } from './dto/course.dto';
 import { EnrollUserDto, EnrollmentDto } from './dto/enrollment.dto';
-import { SkipEnrollmentCheck } from './guards/skip-enrollment-check.decorator';
 
 /**
  * Admin Course Management Controller
  *
  * Provides endpoints for administrators to manage courses, modules, lessons, and enrollments.
  * All endpoints require Admin role.
+ * Note: Admin users automatically bypass enrollment checks in the EnrollmentGuard.
  */
 @ApiTags('admin-courses')
 @Controller({
@@ -51,7 +51,6 @@ import { SkipEnrollmentCheck } from './guards/skip-enrollment-check.decorator';
 })
 @UseGuards(AuthGuard, RolesGuard)
 @Roles(Role.Admin)
-@SkipEnrollmentCheck()
 export class CoursesAdminController {
   constructor(
     private readonly coursesService: CoursesService,

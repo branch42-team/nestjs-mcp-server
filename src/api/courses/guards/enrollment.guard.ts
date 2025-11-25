@@ -1,3 +1,4 @@
+import { Role } from '@/api/user/user.enum';
 import {
   CanActivate,
   ExecutionContext,
@@ -56,6 +57,11 @@ export class EnrollmentGuard implements CanActivate {
 
     if (!session?.user) {
       throw new ForbiddenException('User session not found');
+    }
+
+    // Skip enrollment check for admin users
+    if (session.user.role === Role.Admin) {
+      return true;
     }
 
     const userId = session.user.id;
