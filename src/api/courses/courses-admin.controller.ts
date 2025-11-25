@@ -36,6 +36,7 @@ import {
   UpdateModuleDto,
 } from './dto/course.dto';
 import { EnrollUserDto, EnrollmentDto } from './dto/enrollment.dto';
+import { SkipEnrollmentCheck } from './guards/skip-enrollment-check.decorator';
 
 /**
  * Admin Course Management Controller
@@ -50,6 +51,7 @@ import { EnrollUserDto, EnrollmentDto } from './dto/enrollment.dto';
 })
 @UseGuards(AuthGuard, RolesGuard)
 @Roles(Role.Admin)
+@SkipEnrollmentCheck()
 export class CoursesAdminController {
   constructor(
     private readonly coursesService: CoursesService,

@@ -19,6 +19,8 @@ import {
   EnrollmentWithCourseDto,
   UpdateEnrollmentDto,
 } from './dto/enrollment.dto';
+import { EnrollmentGuard } from './guards/enrollment.guard';
+import { SkipEnrollmentCheck } from './guards/skip-enrollment-check.decorator';
 
 /**
  * User Course Controller
@@ -30,7 +32,7 @@ import {
   path: 'courses',
   version: '1',
 })
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, EnrollmentGuard)
 export class CoursesUserController {
   constructor(
     private readonly coursesService: CoursesService,
@@ -49,6 +51,7 @@ export class CoursesUserController {
     description: 'Search courses by content using semantic search',
     type: String,
   })
+  @SkipEnrollmentCheck()
   @Get()
   async getActiveCourses(
     @Query('search') search?: string,
@@ -125,6 +128,7 @@ export class CoursesUserController {
     summary: 'Get current user enrollments',
     type: EnrollmentWithCourseDto,
   })
+  @SkipEnrollmentCheck()
   @Get('my/enrollments')
   async getMyEnrollments(
     @CurrentUserSession('user') user: CurrentUserSession['user'],
@@ -141,6 +145,7 @@ export class CoursesUserController {
     type: 'string',
     description: 'Enrollment ID',
   })
+  @SkipEnrollmentCheck()
   @Get('enrollments/:enrollmentId')
   async getEnrollment(
     @Param('enrollmentId', ParseUUIDPipe) enrollmentId: string,
@@ -158,6 +163,7 @@ export class CoursesUserController {
     type: 'string',
     description: 'Enrollment ID',
   })
+  @SkipEnrollmentCheck()
   @Put('enrollments/:enrollmentId')
   async updateEnrollment(
     @Param('enrollmentId', ParseUUIDPipe) enrollmentId: string,
