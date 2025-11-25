@@ -55,7 +55,7 @@ services:
     stdin_open: true
     tty: true
     command: >
-      sh -c "pnpm start:dev"
+      sh -c "pnpm start:mcp"
 
   database:
     image: pgvector/pgvector:pg17

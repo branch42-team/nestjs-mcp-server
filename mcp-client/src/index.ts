@@ -35,15 +35,11 @@ class CLI {
     // eslint-disable-next-line no-console
     console.clear();
     // eslint-disable-next-line no-console
-    console.log(
-      chalk.bold.cyan('\n╔════════════════════════════════════════╗'),
-    );
+    console.log(chalk.bold.red('\n╔════════════════════════════════════════╗'));
     // eslint-disable-next-line no-console
-    console.log(chalk.bold.cyan('║   Epicode MCP CLI Client v1.0.0        ║'));
+    console.log(chalk.bold.red('║   Epicode MCP CLI Client v1.0.0        ║'));
     // eslint-disable-next-line no-console
-    console.log(
-      chalk.bold.cyan('╚════════════════════════════════════════╝\n'),
-    );
+    console.log(chalk.bold.red('╚════════════════════════════════════════╝\n'));
 
     // Get API key
     const apiKey = process.env.MCP_API_KEY;
@@ -67,12 +63,27 @@ class CLI {
       process.exit(1);
     }
 
-    const containerName = process.env.MCP_SERVER_CONTAINER || 'assignment-mcp';
+    const useDocker = process.env.MCP_USE_DOCKER === 'true';
+    const containerName = (
+      process.env.MCP_SERVER_CONTAINER || 'assignment-mcp'
+    ).trim();
+    // Default to parent directory (the main project)
+    const serverPath = process.env.MCP_SERVER_PATH || '..';
 
     // Connect to MCP server
     // eslint-disable-next-line no-console
-    console.log(chalk.dim('Initializing MCP client...'));
-    this.client = new McpClient(apiKey, containerName);
+    console.log(
+      chalk.dim(
+        useDocker
+          ? `Initializing MCP client (Docker: ${containerName})...`
+          : `Initializing MCP client (Local: ${serverPath})...`,
+      ),
+    );
+    this.client = new McpClient(apiKey, {
+      useDocker,
+      containerName,
+      serverPath,
+    });
 
     try {
       await this.client.connect();

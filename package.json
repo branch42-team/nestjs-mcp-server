@@ -9,7 +9,8 @@
     "start": "concurrently -n api,email -c cyan,green 'nest start' 'pnpm email:build'",
     "start:dev": "concurrently -n api,email -c cyan,green 'nest start --watch' 'pnpm email:watch'",
     "start:debug": "concurrently -n api,email -c cyan,green 'nest start --debug --watch' 'pnpm email:watch'",
-    "start:mcp": "nest start --watch",
+    "start:mcp": "nest start",
+    "start:mcp:node": "node dist/main.js",
     "build": "nest build",
     "postbuild": "pnpm email:build && copyfiles -f ./src/generated/*.gql ./dist/generated",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules pnpm exec jest",
@@ -115,6 +116,7 @@
     "rxjs": "^7.8.1",
     "socket.io": "^4.8.1",
     "tslib": "^2.7.0",
+    "tsx": "^4.20.6",
     "typeorm": "^0.3.20",
     "typeorm-extension": "^3.6.2",
     "uuid": "11.0.3"

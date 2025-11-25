@@ -176,6 +176,20 @@ export class AppModule {
           inject: [ConfigService],
           useFactory: useBullFactory,
         }),
+        BullBoardModule.forRoot({
+          route: BULL_BOARD_PATH,
+          adapter: FastifyAdapter,
+        }),
+        I18nModule.forRootAsync({
+          resolvers: [
+            { use: QueryResolver, options: ['lang'] },
+            AcceptLanguageResolver,
+            new HeaderResolver(['x-lang']),
+          ],
+          inject: [ConfigService],
+          useFactory: useI18nFactory,
+        }),
+        AuthModule.forRootAsync(),
         CacheManagerModule,
         McpModule,
       ],

@@ -56,6 +56,7 @@ async function bootstrap() {
         bufferLogs: false,
         // Disable all logging to stdout - MCP uses stdio for protocol communication
         logger: false,
+        abortOnError: false,
       });
 
       // Get MCP server and start it
@@ -224,4 +225,10 @@ async function bootstrap() {
   return app;
 }
 
-void bootstrap();
+bootstrap().catch((error) => {
+  // eslint-disable-next-line no-console
+  console.error('❌ Bootstrap failed:');
+  // eslint-disable-next-line no-console
+  console.error(error);
+  process.exit(1);
+});
