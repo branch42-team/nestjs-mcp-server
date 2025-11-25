@@ -15,7 +15,7 @@ export default tsEslint.config({
       sourceType: 'module',
     },
   },
-  ignores: ['eslint.config.mjs', 'src/generated/*'],
+  ignores: ['eslint.config.mjs', 'src/generated/*', 'seed/*'],
   rules: {
     'no-console': 'error',
     '@typescript-eslint/interface-name-prefix': 'off',

@@ -47,6 +47,7 @@
     "@bull-board/fastify": "^5.23.0",
     "@bull-board/nestjs": "^5.23.0",
     "@bull-board/ui": "5.23.0",
+    "@faker-js/faker": "^10.1.0",
     "@fastify/cookie": "9.4.0",
     "@fastify/multipart": "^9.0.1",
     "@fastify/static": "^7.0.4",
