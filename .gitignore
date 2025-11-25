@@ -73,3 +73,7 @@ src/tmp/**/*
 
 # local docs
 docs/**/*
+
+# mcp-client
+mcp-client/dist
+mcp-client/node_modules

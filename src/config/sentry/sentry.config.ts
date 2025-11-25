@@ -23,7 +23,7 @@ export function getConfig(): SentryConfig {
 
 export default registerAs<SentryConfig>('sentry', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering SentryConfig from environment variables`);
+  console.error(`Registering SentryConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

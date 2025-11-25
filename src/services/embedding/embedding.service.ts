@@ -1,8 +1,8 @@
 import { EmbeddingConfig } from '@/config/embedding/embedding-config.type';
+import { FeatureExtractionPipeline, pipeline } from '@huggingface/transformers';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { FeatureExtractionPipeline, pipeline } from '@xenova/transformers';
 import { Cache } from 'cache-manager';
 import * as crypto from 'crypto';
 
@@ -42,7 +42,7 @@ export class EmbeddingService {
         'feature-extraction',
         this.config.model.name,
         {
-          quantized: true, // Use quantized model for better performance
+          dtype: 'q8', // Use quantized model (8-bit) for better performance
         },
       );
 
@@ -87,6 +87,7 @@ export class EmbeddingService {
       });
 
       // Convert to array and extract data
+      // For @huggingface/transformers, the output has a .data property that can be used directly
       const embedding = Array.from(output.data) as number[];
 
       // Validate embedding dimensions

@@ -24,6 +24,7 @@ import { BULL_BOARD_PATH } from './config/bull/bull.config';
 import { type GlobalConfig } from './config/config.type';
 import { Environment, SWAGGER_PATH } from './constants/app.constant';
 import { SentryInterceptor } from './interceptors/sentry.interceptor';
+import { McpServer } from './mcp/mcp.server';
 import { basicAuthMiddleware } from './middlewares/basic-auth.middleware';
 import { RedisIoAdapter } from './shared/socket/redis.adapter';
 import { consoleLoggingConfig } from './tools/logger/logger-factory';
@@ -41,6 +42,49 @@ async function bootstrap() {
   const appConfig = getAppConfig();
 
   const isWorker = appConfig.isWorker;
+  const isMcp = appConfig.isMcp;
+
+  // MCP mode uses a different bootstrap process
+  if (isMcp) {
+    try {
+      // MCP uses stdio for communication, so we must NOT log to stdout
+      // All logs must go to stderr
+      // eslint-disable-next-line no-console
+      console.error('🚀 Starting MCP Server...');
+
+      const app = await NestFactory.createApplicationContext(AppModule.mcp(), {
+        bufferLogs: false,
+        // Disable all logging to stdout - MCP uses stdio for protocol communication
+        logger: false,
+        abortOnError: false,
+      });
+
+      // Get MCP server and start it
+      const mcpServer = app.get(McpServer);
+      await mcpServer.start();
+
+      // Handle shutdown
+      process.on('SIGINT', async () => {
+        await mcpServer.stop();
+        await app.close();
+        process.exit(0);
+      });
+
+      process.on('SIGTERM', async () => {
+        await mcpServer.stop();
+        await app.close();
+        process.exit(0);
+      });
+
+      return app;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('❌ Failed to start MCP Server:');
+      // eslint-disable-next-line no-console
+      console.error(error);
+      process.exit(1);
+    }
+  }
 
   const app = await NestFactory.create<NestFastifyApplication>(
     isWorker ? AppModule.worker() : AppModule.main(),
@@ -181,4 +225,10 @@ async function bootstrap() {
   return app;
 }
 
-void bootstrap();
+bootstrap().catch((error) => {
+  // eslint-disable-next-line no-console
+  console.error('❌ Bootstrap failed:');
+  // eslint-disable-next-line no-console
+  console.error(error);
+  process.exit(1);
+});

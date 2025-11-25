@@ -86,6 +86,19 @@ export class CoursesService {
     return courses.map((course) => course.toDto(CourseDto));
   }
 
+  async getCoursesByIds(courseIds: string[]): Promise<CourseDto[]> {
+    if (courseIds.length === 0) {
+      return [];
+    }
+    const courses = await this.courseRepository
+      .createQueryBuilder('course')
+      .whereInIds(courseIds)
+      .andWhere('course.isActive = :isActive', { isActive: true })
+      .orderBy('course.createdAt', 'DESC')
+      .getMany();
+    return courses.map((course) => course.toDto(CourseDto));
+  }
+
   async updateCourse(id: string, dto: UpdateCourseDto): Promise<CourseDto> {
     const course = await this.courseRepository.findOne({ where: { id } });
 

@@ -3,6 +3,9 @@
 - [x] Nest.js with Fastify
 - [x] PostgreSQL with TypeORM
 - [x] [Better Auth](https://www.better-auth.com/) for complete authentication. Handles authentication kinds like email/password, OAuth, Magic Link, Pass Keys, Two-Factor Authentication, Session Management, etc. [Learn More](#better-auth)
+- [x] **MCP Server** - Model Context Protocol server for AI-powered course queries [Learn More](#mcp-server-)
+- [x] **API Key Management** - Secure programmatic access with API keys [Learn More](#api-key-management)
+- [x] **Course Management System** - Complete LMS with enrollments and RAG search [Learn More](./docs/COURSE_SYSTEM.md)
 - [x] REST, GraphQL & WebSocket API
 - [x] Websocket using Socket.io via Redis Adapter(For future scalability with clusters)
 - [x] Swagger Documentation and API versioning for REST API
@@ -61,6 +64,65 @@ Rolling our own auth is doable but maintaining all kinds of authentication types
 - Two Factor Authentication
 - Role based Authentication & Authorization
 - Session Management
+
+### MCP Server 🤖
+
+The MCP (Model Context Protocol) server exposes course content through a standardized protocol, enabling AI agents and CLI tools to query and search courses programmatically. Key features:
+
+- **6 Course Management Tools**: List, search, and retrieve course content
+- **API Key Authentication**: Secure access with user-scoped permissions
+- **Enrollment-Based Authorization**: Users can only access enrolled courses
+- **Semantic Search**: AI-powered search across lesson content using RAG
+- **Interactive CLI Client**: Natural language interface for course queries
+- **Docker Integration**: Runs as separate service alongside main API
+
+#### Quick Start
+
+1. **Create an API Key**:
+   ```bash
+   # Via Swagger UI at http://localhost:3000/swagger
+   # POST /api/v1/user/api-keys
+   {
+     "name": "My MCP Key"
+   }
+   ```
+
+2. **Setup CLI Client**:
+   ```bash
+   cd mcp-client
+   pnpm install
+   echo "MCP_API_KEY=your-key-here" > .env
+   pnpm dev
+   ```
+
+3. **Start Querying**:
+   ```
+   epicode> list courses
+   epicode> find lessons about variables
+   epicode> search typescript
+   ```
+
+**Documentation**:
+- [MCP Server Guide](./docs/MCP_SERVER.md) - Complete server documentation
+- [API Key Management](./docs/API_KEY_MANAGEMENT.md) - Security and usage guide
+- [CLI Client](./mcp-client/README.md) - Interactive terminal client
+
+#### API Key Management
+
+Create and manage API keys for programmatic access:
+
+**Endpoints**:
+- `POST /api/v1/user/api-keys` - Create new key
+- `GET /api/v1/user/api-keys` - List your keys
+- `GET /api/v1/user/api-keys/:id` - Get key details
+- `DELETE /api/v1/user/api-keys/:id` - Revoke key
+
+**Security Features**:
+- SHA-256 hashed storage
+- Optional expiration dates
+- Usage tracking (lastUsedAt)
+- Instant revocation
+- User-scoped permissions
 
 ### Automatic API Generation on the Frontend 🚀
 

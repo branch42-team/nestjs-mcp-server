@@ -120,8 +120,9 @@ export function getConfig(): EmbeddingConfig {
 }
 
 export default registerAs<EmbeddingConfig>('embedding', () => {
+  // MCP mode uses stdio for protocol communication, so log to stderr
   // eslint-disable-next-line no-console
-  console.info(`Registering EmbeddingConfig from environment variables`);
+  console.error(`Registering EmbeddingConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

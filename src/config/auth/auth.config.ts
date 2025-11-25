@@ -13,11 +13,11 @@ class EnvironmentVariablesValidator {
   BASIC_AUTH_USERNAME: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   BASIC_AUTH_PASSWORD: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   GITHUB_CLIENT_ID: string;
 
   @IsString()
@@ -43,7 +43,7 @@ export function getConfig(): AuthConfig {
 
 export default registerAs<AuthConfig>('auth', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering AuthConfig from environment variables`);
+  console.error(`Registering AuthConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

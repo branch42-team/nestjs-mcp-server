@@ -39,6 +39,7 @@ import { default as useThrottlerFactory } from './config/throttler/throttler.fac
 import { AppThrottlerGuard } from './config/throttler/throttler.guard';
 import { default as useGraphqlFactory } from './graphql/graphql.factory';
 import { default as useI18nFactory } from './i18n/i18n.factory';
+import { McpModule } from './mcp/mcp.module';
 import { CacheModule as CacheManagerModule } from './shared/cache/cache.module';
 import { MailModule } from './shared/mail/mail.module';
 import { SocketModule } from './shared/socket/socket.module';
@@ -141,6 +142,57 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [...AppModule.common().imports, WorkerModule],
+    };
+  }
+
+  static mcp(): DynamicModule {
+    return {
+      module: AppModule,
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [
+            appConfig,
+            databaseConfig,
+            redisConfig,
+            authConfig,
+            bullConfig,
+            embeddingConfig,
+          ],
+          envFilePath: ['.env'],
+        }),
+        LoggerModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: useLoggerFactory,
+        }),
+        TypeOrmModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: databaseConfig,
+        }),
+        BullModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: useBullFactory,
+        }),
+        BullBoardModule.forRoot({
+          route: BULL_BOARD_PATH,
+          adapter: FastifyAdapter,
+        }),
+        I18nModule.forRootAsync({
+          resolvers: [
+            { use: QueryResolver, options: ['lang'] },
+            AcceptLanguageResolver,
+            new HeaderResolver(['x-lang']),
+          ],
+          inject: [ConfigService],
+          useFactory: useI18nFactory,
+        }),
+        AuthModule.forRootAsync(),
+        CacheManagerModule,
+        McpModule,
+      ],
     };
   }
 }

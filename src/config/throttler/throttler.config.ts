@@ -30,7 +30,7 @@ export function getConfig(): ThrottlerConfig {
 
 export default registerAs<ThrottlerConfig>('throttler', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering ThrottlerConfig from environment variables`);
+  console.error(`Registering ThrottlerConfig from environment variables`);
   validateConfig(process.env, ThrottlerValidator);
   return getConfig();
 });

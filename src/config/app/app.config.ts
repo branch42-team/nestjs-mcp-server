@@ -31,6 +31,10 @@ class EnvironmentVariablesValidator {
   IS_WORKER: boolean;
 
   @IsString()
+  @IsOptional()
+  APP_MODE: string;
+
+  @IsString()
   @IsNotEmpty()
   APP_NAME: string;
 
@@ -85,11 +89,13 @@ class EnvironmentVariablesValidator {
 
 export function getConfig(): AppConfig {
   const port = parseInt(process.env.APP_PORT, 10);
+  const appMode = process.env.APP_MODE || '';
 
   return {
     nodeEnv: (process.env.NODE_ENV || Environment.Development) as Environment,
     isHttps: process.env.IS_HTTPS === 'true',
-    isWorker: process.env.IS_WORKER === 'true',
+    isWorker: process.env.IS_WORKER === 'true' || appMode === 'worker',
+    isMcp: process.env.IS_MCP === 'true' || appMode === 'mcp',
     name: process.env.APP_NAME,
     appPrefix: kebabCase(process.env.APP_NAME),
     url: process.env.APP_URL || `http://localhost:${port}`,
@@ -106,8 +112,9 @@ export function getConfig(): AppConfig {
 }
 
 export default registerAs<AppConfig>('app', () => {
+  // MCP mode uses stdio for protocol communication, so log to stderr
   // eslint-disable-next-line no-console
-  console.info(`Registering AppConfig from environment variables`);
+  console.error(`Registering AppConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });
