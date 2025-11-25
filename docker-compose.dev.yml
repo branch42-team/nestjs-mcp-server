@@ -35,7 +35,7 @@ services:
       sh -c "pnpm start:dev"
 
   database:
-    image: postgres:17.7
+    image: pgvector/pgvector:pg17
     container_name: assignment-postgres
     restart: unless-stopped
     environment:
@@ -47,6 +47,7 @@ services:
       - '${DOCKER_DATABASE_PORT}:5432'
     volumes:
       - ./.docker/postgres_data:/var/lib/postgresql/data
+      - ./scripts/init-pgvector.sh:/docker-entrypoint-initdb.d/init-pgvector.sh:ro
     networks:
       - assignment-network
 

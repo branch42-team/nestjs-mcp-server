@@ -1,6 +1,7 @@
 import appConfig from '@/config/app/app.config';
 import authConfig from '@/config/auth/auth.config';
 import databaseConfig from '@/config/database/database.config';
+import embeddingConfig from '@/config/embedding/embedding.config';
 import mailConfig from '@/config/mail/mail.config';
 import redisConfig from '@/config/redis/redis.config';
 import { BullBoardModule } from '@bull-board/nestjs';
@@ -63,6 +64,7 @@ export class AppModule {
             throttlerConfig,
             awsConfig,
             grafanaConfig,
+            embeddingConfig,
           ],
           envFilePath: ['.env'],
         }),
