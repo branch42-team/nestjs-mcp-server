@@ -44,6 +44,7 @@ services:
       - .:/app
     environment:
       - APP_MODE=mcp
+      - IS_MCP=true
       - DATABASE_HOST=database
       - REDIS_HOST=redis
       - MCP_SERVER_NAME=epicode-course-mcp
@@ -55,8 +56,6 @@ services:
     tty: true
     command: >
       sh -c "pnpm start:dev"
-    networks:
-      - assignment-network
 
   database:
     image: pgvector/pgvector:pg17

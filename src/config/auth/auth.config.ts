@@ -13,11 +13,11 @@ class EnvironmentVariablesValidator {
   BASIC_AUTH_USERNAME: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   BASIC_AUTH_PASSWORD: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   GITHUB_CLIENT_ID: string;
 
   @IsString()

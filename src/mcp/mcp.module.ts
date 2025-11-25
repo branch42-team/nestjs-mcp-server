@@ -10,9 +10,7 @@ import { UserEntity } from '@/auth/entities/user.entity';
 import { EmbeddingModule } from '@/services/embedding/embedding.module';
 import { CacheModule } from '@nestjs/cache-manager';
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import mcpConfig from './config/mcp.config';
 import { McpEnrollmentGuard } from './guards/enrollment.guard';
 import { CourseHandlers } from './handlers/course.handlers';
 import { RagHandlers } from './handlers/rag.handlers';
@@ -27,7 +25,6 @@ import { McpAuthMiddleware } from './middleware/auth.middleware';
  */
 @Module({
   imports: [
-    ConfigModule.forFeature(mcpConfig),
     TypeOrmModule.forFeature([
       UserEntity,
       ApiKeyEntity,

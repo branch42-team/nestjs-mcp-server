@@ -95,7 +95,7 @@ export function getConfig(): AppConfig {
     nodeEnv: (process.env.NODE_ENV || Environment.Development) as Environment,
     isHttps: process.env.IS_HTTPS === 'true',
     isWorker: process.env.IS_WORKER === 'true' || appMode === 'worker',
-    isMcp: appMode === 'mcp',
+    isMcp: process.env.IS_MCP === 'true' || appMode === 'mcp',
     name: process.env.APP_NAME,
     appPrefix: kebabCase(process.env.APP_NAME),
     url: process.env.APP_URL || `http://localhost:${port}`,

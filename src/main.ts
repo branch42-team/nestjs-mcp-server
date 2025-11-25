@@ -24,6 +24,7 @@ import { BULL_BOARD_PATH } from './config/bull/bull.config';
 import { type GlobalConfig } from './config/config.type';
 import { Environment, SWAGGER_PATH } from './constants/app.constant';
 import { SentryInterceptor } from './interceptors/sentry.interceptor';
+import { McpServer } from './mcp/mcp.server';
 import { basicAuthMiddleware } from './middlewares/basic-auth.middleware';
 import { RedisIoAdapter } from './shared/socket/redis.adapter';
 import { consoleLoggingConfig } from './tools/logger/logger-factory';
@@ -45,30 +46,40 @@ async function bootstrap() {
 
   // MCP mode uses a different bootstrap process
   if (isMcp) {
-    const app = await NestFactory.createApplicationContext(AppModule.mcp(), {
-      bufferLogs: true,
-      logger: appConfig.appLogging ? envToLogger[appConfig.nodeEnv] : false,
-    });
+    try {
+      // eslint-disable-next-line no-console
+      console.log('🚀 Starting MCP Server...');
 
-    // Get MCP server and start it
-    const { McpServer } = await import('./mcp/mcp.server');
-    const mcpServer = app.get(McpServer);
-    await mcpServer.start();
+      const app = await NestFactory.createApplicationContext(AppModule.mcp(), {
+        bufferLogs: true,
+        logger: appConfig.appLogging ? envToLogger[appConfig.nodeEnv] : false,
+      });
 
-    // Handle shutdown
-    process.on('SIGINT', async () => {
-      await mcpServer.stop();
-      await app.close();
-      process.exit(0);
-    });
+      // Get MCP server and start it
+      const mcpServer = app.get(McpServer);
+      await mcpServer.start();
 
-    process.on('SIGTERM', async () => {
-      await mcpServer.stop();
-      await app.close();
-      process.exit(0);
-    });
+      // Handle shutdown
+      process.on('SIGINT', async () => {
+        await mcpServer.stop();
+        await app.close();
+        process.exit(0);
+      });
 
-    return app;
+      process.on('SIGTERM', async () => {
+        await mcpServer.stop();
+        await app.close();
+        process.exit(0);
+      });
+
+      return app;
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error('❌ Failed to start MCP Server:');
+      // eslint-disable-next-line no-console
+      console.error(error);
+      process.exit(1);
+    }
   }
 
   const app = await NestFactory.create<NestFastifyApplication>(

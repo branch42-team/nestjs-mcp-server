@@ -1,5 +1,5 @@
 import { AuthGuard } from '@/auth/auth.guard';
-import { AuthUser } from '@/decorators/auth/user.decorator';
+import { CurrentUserSession } from '@/decorators/auth/current-user-session.decorator';
 import {
   Body,
   Controller,
@@ -47,10 +47,10 @@ export class ApiKeyController {
     description: 'Unauthorized - user not authenticated',
   })
   async createApiKey(
-    @AuthUser('id') userId: string,
+    @CurrentUserSession('user') user: CurrentUserSession['user'],
     @Body() dto: CreateApiKeyDto,
   ): Promise<ApiKeyResponseDto> {
-    return this.apiKeyService.createApiKey(userId, dto);
+    return this.apiKeyService.createApiKey(user.id, dto);
   }
 
   @Get()
@@ -69,9 +69,9 @@ export class ApiKeyController {
     description: 'Unauthorized - user not authenticated',
   })
   async listApiKeys(
-    @AuthUser('id') userId: string,
+    @CurrentUserSession('user') user: CurrentUserSession['user'],
   ): Promise<ApiKeyListItemDto[]> {
-    return this.apiKeyService.listUserApiKeys(userId);
+    return this.apiKeyService.listUserApiKeys(user.id);
   }
 
   @Get(':id')
@@ -89,10 +89,10 @@ export class ApiKeyController {
     description: 'API key not found',
   })
   async getApiKey(
-    @AuthUser('id') userId: string,
+    @CurrentUserSession('user') user: CurrentUserSession['user'],
     @Param('id') keyId: string,
   ): Promise<ApiKeyListItemDto> {
-    return this.apiKeyService.getApiKey(userId, keyId);
+    return this.apiKeyService.getApiKey(user.id, keyId);
   }
 
   @Delete(':id')
@@ -110,9 +110,9 @@ export class ApiKeyController {
     description: 'API key not found',
   })
   async revokeApiKey(
-    @AuthUser('id') userId: string,
+    @CurrentUserSession('user') user: CurrentUserSession['user'],
     @Param('id') keyId: string,
   ): Promise<void> {
-    await this.apiKeyService.revokeApiKey(userId, keyId);
+    await this.apiKeyService.revokeApiKey(user.id, keyId);
   }
 }

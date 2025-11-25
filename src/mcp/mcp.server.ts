@@ -5,7 +5,6 @@ import {
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { CourseHandlers } from './handlers/course.handlers';
 import { RagHandlers } from './handlers/rag.handlers';
 import { McpAuthMiddleware } from './middleware/auth.middleware';
@@ -25,15 +24,12 @@ export class McpServer implements OnModuleInit {
   private serverVersion: string;
 
   constructor(
-    private readonly configService: ConfigService,
     private readonly authMiddleware: McpAuthMiddleware,
     private readonly courseHandlers: CourseHandlers,
     private readonly ragHandlers: RagHandlers,
   ) {
-    this.serverName =
-      this.configService.get<string>('mcp.serverName') || 'epicode-course-mcp';
-    this.serverVersion =
-      this.configService.get<string>('mcp.serverVersion') || '1.0.0';
+    this.serverName = 'epicode-course-mcp';
+    this.serverVersion = '1.0.0';
   }
 
   async onModuleInit() {

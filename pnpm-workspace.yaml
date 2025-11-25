@@ -9,5 +9,6 @@ onlyBuiltDependencies:
   - esbuild
   - msgpackr-extract
   - nestjs-pino
+  - onnxruntime-node
   - protobufjs
   - sharp

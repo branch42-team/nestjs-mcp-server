@@ -1,6 +1,6 @@
 import validateConfig from '@/utils/config/validate-config';
 import { registerAs } from '@nestjs/config';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 import process from 'node:process';
 
 export type McpConfig = {
@@ -10,11 +10,11 @@ export type McpConfig = {
 
 class EnvironmentVariablesValidator {
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   MCP_SERVER_NAME: string;
 
   @IsString()
-  @IsNotEmpty()
+  @IsOptional()
   MCP_SERVER_VERSION: string;
 }
 

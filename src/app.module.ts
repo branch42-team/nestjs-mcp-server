@@ -148,7 +148,37 @@ export class AppModule {
   static mcp(): DynamicModule {
     return {
       module: AppModule,
-      imports: [...AppModule.common().imports, McpModule],
+      imports: [
+        ConfigModule.forRoot({
+          isGlobal: true,
+          load: [
+            appConfig,
+            databaseConfig,
+            redisConfig,
+            authConfig,
+            bullConfig,
+            embeddingConfig,
+          ],
+          envFilePath: ['.env'],
+        }),
+        LoggerModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: useLoggerFactory,
+        }),
+        TypeOrmModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: databaseConfig,
+        }),
+        BullModule.forRootAsync({
+          imports: [ConfigModule],
+          inject: [ConfigService],
+          useFactory: useBullFactory,
+        }),
+        CacheManagerModule,
+        McpModule,
+      ],
     };
   }
 }

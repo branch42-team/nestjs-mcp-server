@@ -17,14 +17,20 @@ function validateConfig<T extends object>(
       .map(
         (error) =>
           `\nError in ${error.property}:\n` +
-          Object.entries(error.constraints)
-            .map(([key, value]) => `+ ${key}: ${value}`)
+          Object.entries(error.constraints || {})
+            .map(([key, value]) => `  ${key}: ${value}`)
             .join('\n'),
       )
       .join('\n');
 
     // eslint-disable-next-line no-console
-    console.error(`\n${errors.toString()}`);
+    console.error('\n========================================');
+    // eslint-disable-next-line no-console
+    console.error('CONFIG VALIDATION ERROR:');
+    // eslint-disable-next-line no-console
+    console.error(errorMsg);
+    // eslint-disable-next-line no-console
+    console.error('========================================\n');
     throw new Error(errorMsg);
   }
   return validatedConfig;
