@@ -111,8 +111,9 @@ export function getConfig(): DatabaseConfig {
 }
 
 export default registerAs<DatabaseConfig>('database', () => {
+  // MCP mode uses stdio for protocol communication, so log to stderr
   // eslint-disable-next-line no-console
-  console.info(`Registering DatabaseConfig from environment variables`);
+  console.error(`Registering DatabaseConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

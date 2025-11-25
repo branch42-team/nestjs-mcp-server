@@ -20,7 +20,7 @@ class EnvironmentVariablesValidator {
 
 export default registerAs<McpConfig>('mcp', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering McpConfig from environment variables`);
+  console.error(`Registering McpConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
 
   return {

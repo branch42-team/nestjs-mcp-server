@@ -112,8 +112,9 @@ export function getConfig(): AppConfig {
 }
 
 export default registerAs<AppConfig>('app', () => {
+  // MCP mode uses stdio for protocol communication, so log to stderr
   // eslint-disable-next-line no-console
-  console.info(`Registering AppConfig from environment variables`);
+  console.error(`Registering AppConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

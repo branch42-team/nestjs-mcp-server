@@ -33,7 +33,7 @@ export function getConfig(): AwsConfig {
 
 export default registerAs<AwsConfig>('aws', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering AWSConfig from environment variables`);
+  console.error(`Registering AWSConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });

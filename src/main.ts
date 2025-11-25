@@ -47,12 +47,15 @@ async function bootstrap() {
   // MCP mode uses a different bootstrap process
   if (isMcp) {
     try {
+      // MCP uses stdio for communication, so we must NOT log to stdout
+      // All logs must go to stderr
       // eslint-disable-next-line no-console
-      console.log('🚀 Starting MCP Server...');
+      console.error('🚀 Starting MCP Server...');
 
       const app = await NestFactory.createApplicationContext(AppModule.mcp(), {
-        bufferLogs: true,
-        logger: appConfig.appLogging ? envToLogger[appConfig.nodeEnv] : false,
+        bufferLogs: false,
+        // Disable all logging to stdout - MCP uses stdio for protocol communication
+        logger: false,
       });
 
       // Get MCP server and start it

@@ -40,7 +40,9 @@ export class McpServer implements OnModuleInit {
    * Initialize and start the MCP server
    */
   async start() {
-    this.logger.log('Initializing MCP server...');
+    // MCP uses stdio for protocol communication, so we log to stderr
+    // eslint-disable-next-line no-console
+    console.error('Initializing MCP server...');
 
     // Create MCP server instance
     this.server = new Server(
@@ -62,10 +64,12 @@ export class McpServer implements OnModuleInit {
     const transport = new StdioServerTransport();
     await this.server.connect(transport);
 
-    this.logger.log(
+    // eslint-disable-next-line no-console
+    console.error(
       `MCP server started: ${this.serverName} v${this.serverVersion}`,
     );
-    this.logger.log(`Registered ${Object.keys(COURSE_TOOLS).length} tools`);
+    // eslint-disable-next-line no-console
+    console.error(`Registered ${Object.keys(COURSE_TOOLS).length} tools`);
   }
 
   /**
@@ -146,7 +150,8 @@ export class McpServer implements OnModuleInit {
             ],
           };
         } catch (error: any) {
-          this.logger.error(`Error handling tool ${name}:`, error);
+          // eslint-disable-next-line no-console
+          console.error(`Error handling tool ${name}:`, error);
 
           return {
             content: [
@@ -174,9 +179,11 @@ export class McpServer implements OnModuleInit {
    */
   async stop() {
     if (this.server) {
-      this.logger.log('Stopping MCP server...');
+      // eslint-disable-next-line no-console
+      console.error('Stopping MCP server...');
       await this.server.close();
-      this.logger.log('MCP server stopped');
+      // eslint-disable-next-line no-console
+      console.error('MCP server stopped');
     }
   }
 }

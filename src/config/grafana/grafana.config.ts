@@ -22,7 +22,7 @@ export function getConfig(): GrafanaConfig {
 
 export default registerAs<GrafanaConfig>('grafana', () => {
   // eslint-disable-next-line no-console
-  console.info(`Registering GrafanaConfig from environment variables`);
+  console.error(`Registering GrafanaConfig from environment variables`);
   validateConfig(process.env, EnvironmentVariablesValidator);
   return getConfig();
 });
