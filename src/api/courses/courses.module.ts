@@ -15,6 +15,7 @@ import { EnrollmentEntity } from './entities/enrollment.entity';
 import { LessonEmbeddingEntity } from './entities/lesson-embedding.entity';
 import { LessonEntity } from './entities/lesson.entity';
 import { ModuleEntity } from './entities/module.entity';
+import { EnrollmentGuard } from './guards/enrollment.guard';
 
 @Module({
   imports: [
@@ -37,7 +38,7 @@ import { ModuleEntity } from './entities/module.entity';
     CoursesUserController,
     CoursesRagController,
   ],
-  providers: [CoursesService, CoursesRagService],
+  providers: [CoursesService, CoursesRagService, EnrollmentGuard],
   exports: [CoursesService, CoursesRagService],
 })
 export class CoursesModule {}

@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { AuthGuard } from '@/auth/auth.guard';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CoursesRagService } from './courses-rag.service';
 import {
@@ -6,9 +15,12 @@ import {
   SearchResponseDto,
   SimilarLessonsDto,
 } from './dto/search.dto';
+import { EnrollmentGuard } from './guards/enrollment.guard';
+import { SkipEnrollmentCheck } from './guards/skip-enrollment-check.decorator';
 
 @ApiTags('RAG Search')
 @Controller('api')
+@UseGuards(AuthGuard, EnrollmentGuard)
 export class CoursesRagController {
   constructor(private readonly ragService: CoursesRagService) {}
 
@@ -23,6 +35,7 @@ export class CoursesRagController {
     description: 'Search results',
     type: SearchResponseDto,
   })
+  @SkipEnrollmentCheck()
   async searchAllCourses(
     @Body() searchDto: SearchQueryDto,
   ): Promise<SearchResponseDto> {
