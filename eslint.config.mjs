@@ -15,7 +15,7 @@ export default tsEslint.config({
       sourceType: 'module',
     },
   },
-  ignores: ['eslint.config.mjs', 'src/generated/*', 'seed/*'],
+  ignores: ['eslint.config.mjs', 'src/generated/*', 'seed/*', 'mcp-client/*'],
   rules: {
     'no-console': 'error',
     '@typescript-eslint/interface-name-prefix': 'off',

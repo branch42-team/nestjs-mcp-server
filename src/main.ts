@@ -41,6 +41,35 @@ async function bootstrap() {
   const appConfig = getAppConfig();
 
   const isWorker = appConfig.isWorker;
+  const isMcp = appConfig.isMcp;
+
+  // MCP mode uses a different bootstrap process
+  if (isMcp) {
+    const app = await NestFactory.createApplicationContext(AppModule.mcp(), {
+      bufferLogs: true,
+      logger: appConfig.appLogging ? envToLogger[appConfig.nodeEnv] : false,
+    });
+
+    // Get MCP server and start it
+    const { McpServer } = await import('./mcp/mcp.server');
+    const mcpServer = app.get(McpServer);
+    await mcpServer.start();
+
+    // Handle shutdown
+    process.on('SIGINT', async () => {
+      await mcpServer.stop();
+      await app.close();
+      process.exit(0);
+    });
+
+    process.on('SIGTERM', async () => {
+      await mcpServer.stop();
+      await app.close();
+      process.exit(0);
+    });
+
+    return app;
+  }
 
   const app = await NestFactory.create<NestFastifyApplication>(
     isWorker ? AppModule.worker() : AppModule.main(),

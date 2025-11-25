@@ -1,5 +1,5 @@
 packages:
-  - '.'
+  - .
 
 onlyBuiltDependencies:
   - '@apollo/protobufjs'
@@ -9,4 +9,5 @@ onlyBuiltDependencies:
   - esbuild
   - msgpackr-extract
   - nestjs-pino
+  - protobufjs
   - sharp

@@ -37,7 +37,8 @@
     "prepare": "husky || true",
     "graph:app": "madge ./src/main.ts --image ./.tmp/graph.png",
     "graph:circular": "madge --circular ./src/main.ts --image ./.tmp/circular.png",
-    "erd:generate": "ts-node ./scripts/erd-generator.ts"
+    "erd:generate": "ts-node ./scripts/erd-generator.ts",
+    "mcp:client": "tsx scripts/mcp-client.ts"
   },
   "dependencies": {
     "@apollo/server": "^4.11.2",
@@ -51,6 +52,7 @@
     "@fastify/cookie": "9.4.0",
     "@fastify/multipart": "^9.0.1",
     "@fastify/static": "^7.0.4",
+    "@modelcontextprotocol/sdk": "^1.22.0",
     "@nest-lab/fastify-multer": "^1.2.0",
     "@nest-lab/throttler-storage-redis": "^1.0.0",
     "@nestjs-modules/mailer": "^2.0.2",

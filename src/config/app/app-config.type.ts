@@ -4,6 +4,7 @@ export type AppConfig = {
   nodeEnv: `${Environment}`;
   isHttps: boolean;
   isWorker: boolean;
+  isMcp: boolean;
   name: string;
   appPrefix: string;
   url: string;

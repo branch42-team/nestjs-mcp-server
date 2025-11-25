@@ -39,6 +39,7 @@ import { default as useThrottlerFactory } from './config/throttler/throttler.fac
 import { AppThrottlerGuard } from './config/throttler/throttler.guard';
 import { default as useGraphqlFactory } from './graphql/graphql.factory';
 import { default as useI18nFactory } from './i18n/i18n.factory';
+import { McpModule } from './mcp/mcp.module';
 import { CacheModule as CacheManagerModule } from './shared/cache/cache.module';
 import { MailModule } from './shared/mail/mail.module';
 import { SocketModule } from './shared/socket/socket.module';
@@ -141,6 +142,13 @@ export class AppModule {
     return {
       module: AppModule,
       imports: [...AppModule.common().imports, WorkerModule],
+    };
+  }
+
+  static mcp(): DynamicModule {
+    return {
+      module: AppModule,
+      imports: [...AppModule.common().imports, McpModule],
     };
   }
 }

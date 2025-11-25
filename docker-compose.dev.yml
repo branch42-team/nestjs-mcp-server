@@ -34,6 +34,30 @@ services:
     command: >
       sh -c "pnpm start:dev"
 
+  mcp:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: assignment-mcp
+    volumes:
+      - /app/node_modules
+      - .:/app
+    environment:
+      - APP_MODE=mcp
+      - DATABASE_HOST=database
+      - REDIS_HOST=redis
+      - MCP_SERVER_NAME=epicode-course-mcp
+      - MCP_SERVER_VERSION=1.0.0
+    depends_on:
+      - database
+      - redis
+    stdin_open: true
+    tty: true
+    command: >
+      sh -c "pnpm start:dev"
+    networks:
+      - assignment-network
+
   database:
     image: pgvector/pgvector:pg17
     container_name: assignment-postgres
