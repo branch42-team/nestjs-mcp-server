@@ -1,252 +1,567 @@
-## Features📦
+# NestJS MCP Server Template
 
-- [x] Nest.js with Fastify
-- [x] PostgreSQL with TypeORM
-- [x] [Better Auth](https://www.better-auth.com/) for complete authentication. Handles authentication kinds like email/password, OAuth, Magic Link, Pass Keys, Two-Factor Authentication, Session Management, etc. [Learn More](#better-auth)
-- [x] **MCP Server** - Model Context Protocol server for AI-powered course queries [Learn More](#mcp-server-)
-- [x] **API Key Management** - Secure programmatic access with API keys [Learn More](#api-key-management)
-- [x] **Course Management System** - Complete LMS with enrollments and RAG search [Learn More](./docs/COURSE_SYSTEM.md)
-- [x] REST, GraphQL & WebSocket API
-- [x] Websocket using Socket.io via Redis Adapter(For future scalability with clusters)
-- [x] Swagger Documentation and API versioning for REST API
-- [x] Automatic API generation on the frontend using OpenAPI Codegen [Learn More](#automatic-api-generation-on-the-frontend-)
-- [x] BullMQ for Queues. Bull board UI to inspect your jobs
-- [x] Worker server for processing background tasks like queues
-- [x] [React Email](https://react.email/) for email template management. [MailPit](https://github.com/axllent/mailpit) SMTP server for local email testing. [Learn More](#email-management-)
-- [x] Caching using Redis
-- [x] Pino for Logging
-- [x] Rate Limiter using Redis
-- [x] Graceful Shutdown
-- [x] Server & Database monitoring with Prometheus & Grafana [Learn More](#server--database-monitoring-)
-- [x] Offset and Cursor based Pagination
-- [x] Local or Remote File Uploads (AWS S3)
-- [x] Sentry
-- [x] Testing with Jest
-- [x] Internationalization using i18n
-- [x] pnpm
-- [x] Docker: Dev & Prod ready from a single script [Learn More](#docker-)
-- [x] Github Actions
-- [x] Commitlint & Husky
-- [x] SWC instead of Webpack
-- [x] Dependency Graph Visualizer [Learn More](#dependency-graph-)
-- [x] Database Entity Relationship Diagram Generator [Learn More](#database-entity-relationship-diagram️)
+<div align="center">
 
-## Development:
+![NestJS](https://img.shields.io/badge/nestjs-%23E0234E.svg?style=for-the-badge&logo=nestjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
+![Fastify](https://img.shields.io/badge/fastify-%23000000.svg?style=for-the-badge&logo=fastify&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/postgresql-%23316192.svg?style=for-the-badge&logo=postgresql&logoColor=white)
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
-- Make `.env` files ready:
+**Production-ready NestJS boilerplate with Model Context Protocol (MCP) server, RAG capabilities, and comprehensive developer tooling**
 
+[Features](#features) • [Quick Start](#quick-start) • [Documentation](#documentation) • [License](#license)
+
+</div>
+
+---
+
+## 🚀 Overview
+
+A comprehensive, production-ready **NestJS template** that combines modern backend architecture with AI capabilities through the **Model Context Protocol (MCP)**. Perfect for building intelligent applications, LMS platforms, content management systems, or any project requiring semantic search and AI integration.
+
+### What Makes This Different?
+
+- 🤖 **Built-in MCP Server**: Expose your data to AI agents with standardized protocol
+- 🔍 **RAG Pipeline**: Semantic search with pgvector and local embeddings (no API costs)
+- 🔐 **Modern Auth**: Better Auth with support for OAuth, 2FA, magic links, and more
+- ⚡ **High Performance**: Fastify adapter (2x faster than Express)
+- 🎯 **Production Ready**: Docker, monitoring, graceful shutdown, health checks
+- 🛠️ **Developer Experience**: Swagger, GraphQL playground, hot reload, Bull Board UI
+
+---
+
+## ✨ Features
+
+### Core Framework
+
+- ✅ **NestJS** with Fastify adapter for high performance
+- ✅ **TypeScript** for type safety and better DX
+- ✅ **PostgreSQL** with TypeORM for robust data management
+- ✅ **Redis** for caching and queue management
+
+### Authentication & Security
+
+- ✅ **[Better Auth](https://www.better-auth.com/)**: Complete auth solution supporting:
+  - Email/Password, OAuth, Magic Links, Passkeys
+  - Two-Factor Authentication (2FA)
+  - Role-based access control (RBAC)
+  - Session management
+- ✅ **API Key Management**: Secure programmatic access with SHA-256 hashing
+- ✅ **Rate Limiting**: Redis-backed request throttling
+- ✅ **Input Validation**: class-validator with custom decorators
+
+### AI & Search Capabilities
+
+- ✅ **MCP Server**: Model Context Protocol implementation for AI agents
+- ✅ **RAG Pipeline**: Retrieval-Augmented Generation with semantic search
+- ✅ **pgvector**: PostgreSQL extension for vector similarity search
+- ✅ **Local Embeddings**: Hugging Face Transformers (no API costs)
+- ✅ **Content Chunking**: Intelligent text splitting for better search accuracy
+
+### API Protocols
+
+- ✅ **REST API**: Versioned endpoints with Swagger documentation
+- ✅ **GraphQL API**: Apollo Server with type-safe schema
+- ✅ **WebSocket**: Socket.io with Redis adapter for clustering
+
+### Background Processing
+
+- ✅ **BullMQ**: Redis-based job queue with retry logic
+- ✅ **Worker Process**: Dedicated worker for heavy computations
+- ✅ **Bull Board**: Web UI for monitoring jobs and queues
+
+### Email System
+
+- ✅ **[React Email](https://react.email/)**: Beautiful, responsive email templates
+- ✅ **[MailPit](https://github.com/axllent/mailpit)**: Local SMTP server for testing
+- ✅ **Auto-compilation**: TSX to HTML at build time
+
+### Developer Tools
+
+- ✅ **Swagger UI**: Interactive API documentation
+- ✅ **OpenAPI Codegen**: Auto-generate frontend API clients
+- ✅ **Dependency Graph**: Visualize module dependencies
+- ✅ **ERD Generator**: Database schema visualization
+- ✅ **Hot Reload**: Fast development iteration
+
+### DevOps & Monitoring
+
+- ✅ **Docker**: Dev and prod configurations with docker-compose
+- ✅ **Prometheus + Grafana**: Optional monitoring dashboards
+- ✅ **Pino Logging**: Structured JSON logs
+- ✅ **Health Checks**: Kubernetes-ready endpoints
+- ✅ **Graceful Shutdown**: Zero downtime deployments
+- ✅ **GitHub Actions**: CI/CD pipeline included
+
+### Code Quality
+
+- ✅ **ESLint + Prettier**: Code formatting and linting
+- ✅ **Husky + Commitlint**: Git hooks for quality enforcement
+- ✅ **Jest**: Unit and E2E testing
+- ✅ **SWC**: Fast compilation (faster than Webpack)
+
+### Other Features
+
+- ✅ **i18n**: Internationalization support
+- ✅ **File Uploads**: Local and AWS S3 support
+- ✅ **Pagination**: Offset and cursor-based
+- ✅ **Sentry Integration**: Error tracking (ready to configure)
+- ✅ **pnpm**: Fast, disk-efficient package manager
+
+---
+
+## 🎯 Use Cases
+
+This template is perfect for:
+
+- 📚 **Learning Management Systems (LMS)**: Course content with semantic search
+- 🤖 **AI-Powered Applications**: Chat agents, document search, RAG systems
+- 📝 **Content Management**: Blog, documentation, knowledge bases
+- 🏢 **SaaS Platforms**: Multi-tenant apps with auth and API keys
+- 🔧 **Internal Tools**: Admin dashboards, background job processing
+- 🚀 **Startup MVPs**: Production-ready foundation to move fast
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 18+ or Bun
+- Docker & Docker Compose
+- pnpm (recommended) or npm
+
+### 1. Use This Template
+
+Click the **"Use this template"** button on GitHub or:
+
+```bash
+git clone https://github.com/branch42-team/nestjs-mcp-server.git my-project
+cd my-project
+pnpm install
 ```
-cp ./.env.example ./.env
-cp ./.env.docker.example ./.env.docker
+
+### 2. Environment Setup
+
+```bash
+cp .env.example .env
+cp .env.docker.example .env.docker
 ```
 
-- Start Docker containers:
+Edit `.env` files with your configuration.
 
-```
+### 3. Start Development Environment
+
+```bash
+# Start all services (PostgreSQL, Redis, MailPit, etc.)
 pnpm docker:dev:up
-```
 
-- Run migrations:
-
-```
-docker exec -it assignment-server sh
+# Run database migrations
+docker exec -it nestjs-server sh
 pnpm migration:up
+exit
 ```
 
-### Better Auth🔒
+### 4. Access Your Services
 
-Rolling our own auth is doable but maintaining all kinds of authentication types ourselves has been found out to be a challenging task. Moreover, rolling our own auth poses security risks. That's why this uses [Better Auth](https://www.better-auth.com/) for everything related to authentication. All of the industry standard authentication kinds are ready to be used out of the box so that you focus on building features rather than worrying about auth shenanigans:
+- **API Swagger**: http://localhost:3000/swagger
+- **GraphQL Playground**: http://localhost:3000/graphql
+- **Bull Board** (Queue UI): http://localhost:3000/bullboard
+- **MailPit** (Email Testing): http://localhost:18025
+- **Prometheus** (Monitoring): http://localhost:9090 (if enabled)
+- **Grafana** (Dashboards): http://localhost:3001 (if enabled)
 
-- Email/Password
-- OAuth
-- Magic Link
-- Pass Keys
-- Two Factor Authentication
-- Role based Authentication & Authorization
-- Session Management
+### 5. Create Your First User
 
-### MCP Server 🤖
+Visit Swagger UI and use:
 
-The MCP (Model Context Protocol) server exposes course content through a standardized protocol, enabling AI agents and CLI tools to query and search courses programmatically. Key features:
+- `POST /api/auth/sign-up/email` to create an account
+- `POST /api/auth/sign-in/email` to login
 
-- **6 Course Management Tools**: List, search, and retrieve course content
-- **API Key Authentication**: Secure access with user-scoped permissions
-- **Enrollment-Based Authorization**: Users can only access enrolled courses
-- **Semantic Search**: AI-powered search across lesson content using RAG
-- **Interactive CLI Client**: Natural language interface for course queries
-- **Docker Integration**: Runs as separate service alongside main API
+---
 
-#### Quick Start
+## 📚 Documentation
 
-1. **Create an API Key**:
-   ```bash
-   # Via Swagger UI at http://localhost:3000/swagger
-   # POST /api/v1/user/api-keys
-   {
-     "name": "My MCP Key"
-   }
-   ```
+### Core Features
 
-2. **Setup CLI Client**:
+#### 🔒 Better Auth
+
+Modern authentication framework handling all auth patterns out of the box:
+
+- **Email/Password**: Traditional auth with secure password hashing
+- **OAuth**: Google, GitHub, and more (easily extensible)
+- **Magic Links**: Passwordless authentication
+- **Passkeys**: WebAuthn support for biometric auth
+- **Two-Factor Authentication**: TOTP-based 2FA
+- **Role-Based Access Control**: Admin/User roles with guards
+- **Session Management**: Redis-backed sessions with auto-refresh
+
+[Learn more about Better Auth →](https://www.better-auth.com/)
+
+#### 🤖 MCP Server
+
+**Model Context Protocol** server implementation enabling AI agents to query your data:
+
+**Key Features**:
+
+- 6 pre-built tools for course/content management
+- API key authentication with user-scoped permissions
+- Enrollment-based authorization (example use case)
+- Semantic search with RAG pipeline
+- Interactive CLI client included
+
+**Quick Example**:
+
+1. Create API key via Swagger: `POST /api/v1/user/api-keys`
+2. Setup CLI:
    ```bash
    cd mcp-client
-   pnpm install
-   echo "MCP_API_KEY=your-key-here" > .env
-   pnpm dev
+   echo "MCP_API_KEY=your-key" > .env
+   pnpm install && pnpm dev
    ```
-
-3. **Start Querying**:
+3. Query naturally:
    ```
-   epicode> list courses
-   epicode> find lessons about variables
-   epicode> search typescript
+   > list courses
+   > find lessons about variables
+   > search typescript
    ```
 
 **Documentation**:
-- [MCP Server Guide](./docs/MCP_SERVER.md) - Complete server documentation
-- [API Key Management](./docs/API_KEY_MANAGEMENT.md) - Security and usage guide
-- [CLI Client](./mcp-client/README.md) - Interactive terminal client
 
-#### API Key Management
+- [MCP Server Guide](./docs/MCP_SERVER.md) - Complete implementation details
+- [API Key Management](./docs/API_KEY_MANAGEMENT.md) - Security best practices
+- [CLI Client](./mcp-client/README.md) - Interactive terminal guide
 
-Create and manage API keys for programmatic access:
+#### 🔑 API Key Management
+
+Secure programmatic access for integrations and MCP clients:
 
 **Endpoints**:
+
 - `POST /api/v1/user/api-keys` - Create new key
 - `GET /api/v1/user/api-keys` - List your keys
 - `GET /api/v1/user/api-keys/:id` - Get key details
 - `DELETE /api/v1/user/api-keys/:id` - Revoke key
 
 **Security Features**:
-- SHA-256 hashed storage
+
+- SHA-256 hashed storage (raw key shown once)
 - Optional expiration dates
-- Usage tracking (lastUsedAt)
+- Usage tracking (`lastUsedAt`)
 - Instant revocation
 - User-scoped permissions
 
-### Automatic API Generation on the Frontend 🚀
+#### 🚀 Automatic Frontend API Generation
 
-You can automatically generate and use all of your backend API in frontend in just one command, thanks to Swagger and OpenAPI spec. Running `pnpm codegen` on the frontend will automatically generate all API's bootstrapped with [Tanstack Query](https://tanstack.com/query/latest) ready to be used with just one import.
-<img src="./github-assets/openapi-codegen.png" />
+Generate type-safe API clients from your Swagger spec:
 
-### Server & Database Monitoring 🚨
-
-Prometheus & Grafana are available with Docker setup only. You might only need to monitor your server or database when the user base grows or when you want to debug some specific issues. That's why this step is completely optional. If you want to monitor your server or database, just enable `monitoring` profile in your `.env` i.e. `COMPOSE_PROFILES=monitoring`.
-
-Server Monitoring Dashboard:
-![alt text](./github-assets/server-monitoring.png)
-
-Database Monitoring Dashboard:
-![alt text](./github-assets/database-monitoring.png)
-
-### Docker 🐬
-
-##### For local development:
-
-- Start container:
-
+```bash
+# On your frontend project
+pnpm codegen
 ```
+
+This auto-generates all API calls with [TanStack Query](https://tanstack.com/query/latest) hooks. Import and use immediately:
+
+```typescript
+import { useGetUserProfile } from '@/api/generated';
+
+function Profile() {
+  const { data, isLoading } = useGetUserProfile();
+  // Fully typed, with caching, refetching, etc.
+}
+```
+
+![OpenAPI Codegen](./github-assets/openapi-codegen.png)
+
+#### 🚨 Server & Database Monitoring
+
+Optional Prometheus + Grafana setup for production monitoring:
+
+**Enable monitoring**:
+
+```bash
+# In .env
+COMPOSE_PROFILES=monitoring
+```
+
+**Metrics tracked**:
+
+- HTTP request duration/rate
+- Database connection pool stats
+- Queue job latency and throughput
+- Memory and CPU usage
+- Custom business metrics
+
+**Dashboards**:
+
+Server Monitoring:
+![Server Monitoring](./github-assets/server-monitoring.png)
+
+Database Monitoring:
+![Database Monitoring](./github-assets/database-monitoring.png)
+
+#### 📬 Email Management
+
+**React Email** for beautiful, testable email templates:
+
+- Design emails in React with type safety
+- Preview all templates in local web UI
+- Automatic compilation to HTML at build time
+- Spam, accessibility, and responsiveness checks
+
+**Commands**:
+
+```bash
+# Preview templates in browser
+pnpm email:dev
+
+# Auto-compiled during build (handled automatically)
+pnpm email:build
+```
+
+**MailPit** for local testing:
+
+- SMTP server runs automatically in dev mode
+- Web UI at http://localhost:18025
+- Catch all outgoing emails
+- No real emails sent during development
+
+![MailPit](./github-assets/mailpit.png)
+
+---
+
+## 🐳 Docker Commands
+
+### Development
+
+```bash
+# Start all services
 pnpm docker:dev:up
-```
 
-- Stop container:
-
-```
+# Stop all services
 pnpm docker:dev:down
+
+# View logs
+docker logs nestjs-server -f
 ```
 
-##### For prod build:
+### Production
 
-- Start container:
-
-```
+```bash
+# Build and start production containers
 pnpm docker:prod:up
-```
 
-- Stop container:
-
-```
+# Stop production containers
 pnpm docker:prod:down
 ```
 
-##### Deployment:
+### Deployment
 
-```
+```bash
+# Quick deploy script
 sh ./bin/deploy.sh
+
+# Or use GitHub Actions
+# Workflow: .github/workflows/main.yml
 ```
 
-or run workflow `.github/workflows/main.yml` via GitHub Actions.
+---
 
-### Email Management 📬
+## 🛠️ Development Tools
 
-#### React Email
+### Dependency Graph
 
-Let's face it, it is not practical to just create some random html email templates and inject your variables and send it to your clients. Your email templates must be checked for spam, CSS compatibility for different email clients, accessibility, responsiveness, etc. You need to make sure all these checks are passed so that your emails don't end up in spam folder. [React Email](https://react.email/) is perfect fit for this. It uses React and provides many responsive email component blocks so that you can test all of the things mentioned earlier in your local development.
+Visualize module dependencies and detect circular references:
 
-<b>NOTE</b>: We use React Email only in local development. We don't ship React and it's packages in production at all(<i>you can see that all of the React packages are dev only</i>). After our email templates have been created, we convert the `.tsx` files into static html files at build time and NodeMailer uses that html file from our backend. All of these things are handled automatically, you don't have to do any extra setup.
+```bash
+# Requires Graphviz: brew install graphviz
 
-- React Email dev server: See all of your email templates in Web UI.
-
-```
-pnpm email:dev
-```
-
-- Build email templates(Handled): Convert `.tsx` templates file into html(`.hbs`). This is already handled in post build (`build` script).
-
-```
-pnpm email: build
-```
-
-- Watch Email(Handled): Watch your `.tsx` email files inside `templates/` folder and convert them to html(`.hbs`). This is already handled when you run your Nest.js server (in `start:dev` script).
-
-```
-pnpm email:watch
-```
-
-<img src="./github-assets/react-email.png" />
-
-### MailPit SMTP Server
-
-In local you can easily test your email by using [MailPit](https://github.com/axllent/mailpit) email client that ships with it's own SMTP server. The SMTP server will automatically run when you run your docker in development mode:
-
-```
-pnpm docker:dev:up
-```
-
-After that, just visit `http://localhost:<DOCKER_MAIL_CLIENT_PORT>`. You can find `DOCKER_MAIL_CLIENT_PORT` on `.env.docker`. By default, it will run on `http://localhost:18025`
-
-<img src="./github-assets/mailpit.png" />
-
-### Dependency Graph 📈
-
-Visualize all of your project modules and their dependencies. Also, detect circular dependencies.
-
-NOTE: Make sure [Graphviz](https://www.graphviz.org/) is installed first.
-
-- All dependencies:
-
-```
+# All dependencies
 pnpm graph:app
-```
 
-- Only circular dependencies:
-
-```
+# Only circular dependencies
 pnpm graph:circular
 ```
 
-<figure>
-<img src="./github-assets/graph.png" />
-</figure>
+![Dependency Graph](./github-assets/graph.png)
 
-### Database Entity Relationship Diagram🛢️
+### Database ERD
 
-Visualize your database entities and their relationships.
+Generate entity relationship diagrams:
 
-```
+```bash
 pnpm erd:generate
 ```
 
-<figure>
-<img src="./github-assets/erd.png"  />
-</figure>
+![ERD](./github-assets/erd.png)
+
+---
+
+## 🏗️ Project Structure
+
+```
+.
+├── src/
+│   ├── api/              # API modules (courses, users, etc.)
+│   ├── auth/             # Authentication (Better Auth integration)
+│   ├── mcp/              # MCP server implementation
+│   ├── config/           # Configuration modules
+│   ├── database/         # TypeORM setup and migrations
+│   ├── services/         # Shared services (embeddings, AWS, etc.)
+│   ├── worker/           # Background job processors
+│   └── main.ts           # Application entry point
+├── mcp-client/           # Interactive CLI client for MCP
+├── docker-compose.yml    # Base Docker configuration
+├── docker-compose.dev.yml   # Development overrides
+├── docker-compose.prod.yml  # Production overrides
+└── docs/                 # Additional documentation
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Unit tests
+pnpm test
+
+# E2E tests
+pnpm test:e2e
+
+# Coverage
+pnpm test:cov
+
+# Watch mode
+pnpm test:watch
+```
+
+---
+
+## 🔧 Customization Guide
+
+### 1. Remove Example Features
+
+This template includes a course management system as an example. To adapt for your use case:
+
+**Remove course-related code**:
+
+```bash
+# Delete course modules
+rm -rf src/api/courses
+
+# Remove from app.module.ts imports
+# Update database migrations
+```
+
+**Or keep and modify**:
+
+- Rename entities to match your domain
+- Adjust the MCP tools in `src/mcp/tools/`
+- Update RAG pipeline in `src/api/courses/courses-rag.service.ts`
+
+### 2. Add Your Own Modules
+
+```bash
+# Generate new module
+nest g module features/my-feature
+nest g service features/my-feature
+nest g controller features/my-feature
+```
+
+### 3. Configure Authentication
+
+**Add OAuth providers** (edit `src/auth/better-auth.service.ts`):
+
+```typescript
+plugins: [
+  oauth({
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+    },
+  }),
+],
+```
+
+### 4. Customize MCP Tools
+
+Add your own tools in `src/mcp/tools/`:
+
+```typescript
+export const myCustomTool: Tool = {
+  name: 'my_custom_tool',
+  description: 'Description for AI agents',
+  inputSchema: {
+    type: 'object',
+    properties: {
+      /* ... */
+    },
+  },
+};
+```
+
+---
+
+## 📦 Tech Stack
+
+| Category         | Technology                 | Purpose                                         |
+| ---------------- | -------------------------- | ----------------------------------------------- |
+| **Runtime**      | Node.js + TypeScript       | Server runtime with type safety                 |
+| **Framework**    | NestJS + Fastify           | Enterprise architecture, 2x Express performance |
+| **Database**     | PostgreSQL 16              | ACID-compliant relational database              |
+| **Vector Store** | pgvector                   | Native Postgres vector extension                |
+| **ORM**          | TypeORM                    | Mature ORM with migrations                      |
+| **Cache/Queue**  | Redis + BullMQ             | In-memory cache and job queue                   |
+| **Auth**         | Better Auth                | Modern authentication framework                 |
+| **API**          | REST + GraphQL + WebSocket | Multiple protocol support                       |
+| **Embeddings**   | Hugging Face Transformers  | Local, cost-free embeddings                     |
+| **Email**        | React Email + MailPit      | Template management + testing                   |
+| **Monitoring**   | Prometheus + Grafana       | Metrics and dashboards                          |
+| **Logging**      | Pino                       | Structured JSON logging                         |
+| **Testing**      | Jest                       | Unit and E2E tests                              |
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'feat: add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- [NestJS](https://nestjs.com/) - Progressive Node.js framework
+- [Better Auth](https://www.better-auth.com/) - Modern authentication
+- [Model Context Protocol](https://modelcontextprotocol.io/) - AI agent protocol
+- [React Email](https://react.email/) - Email templates
+- [Hugging Face](https://huggingface.co/) - ML models and embeddings
+
+---
+
+## 🌟 Star History
+
+If you find this template useful, please consider giving it a star ⭐
+
+---
+
+<div align="center">
+
+**Built with ❤️ by [Branch42 Team](https://github.com/branch42-team)**
+
+[Report Bug](https://github.com/branch42-team/nestjs-mcp-server/issues) • [Request Feature](https://github.com/branch42-team/nestjs-mcp-server/issues)
+
+</div>

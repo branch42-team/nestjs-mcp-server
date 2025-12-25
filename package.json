@@ -1,9 +1,9 @@
 {
-  "name": "epicode-assignment-parth",
-  "version": "0.0.0",
-  "description": "Epicode Assignment Parth",
-  "author": "Parthvsquare",
-  "private": true,
+  "name": "nestjs-mcp-server",
+  "version": "1.0.0",
+  "description": "Production-ready NestJS template with MCP server, RAG pipeline, and comprehensive developer tooling",
+  "author": "Branch42 Team",
+  "private": false,
   "license": "MIT",
   "scripts": {
     "start": "concurrently -n api,email -c cyan,green 'nest start' 'pnpm email:build'",

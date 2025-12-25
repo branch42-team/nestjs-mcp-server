@@ -1,7 +1,7 @@
 services:
   server:
-    container_name: assignment-server
-    image: assignment-server:latest
+    container_name: nestjs-server
+    image: nestjs-server:latest
     restart: unless-stopped
     env_file:
       - .env
@@ -10,13 +10,13 @@ services:
     ports:
       - '${APP_PORT}:${APP_PORT}'
     networks:
-      - assignment-network
+      - nestjs-network
     depends_on:
       - redis
 
   worker:
-    container_name: assignment-worker
-    image: assignment-worker:latest
+    container_name: nestjs-worker
+    image: nestjs-worker:latest
     restart: unless-stopped
     env_file:
       - .env
@@ -25,13 +25,13 @@ services:
     ports:
       - '${APP_WORKER_PORT}:${APP_WORKER_PORT}'
     networks:
-      - assignment-network
+      - nestjs-network
     depends_on:
       - redis
 
   redis:
     image: redis:7.0.1-alpine
-    container_name: assignment-redis
+    container_name: nestjs-redis
     restart: unless-stopped
     ports:
       - '${DOCKER_REDIS_PORT}:6379'
@@ -43,11 +43,11 @@ services:
       test: ['CMD', 'redis-cli', '--raw', 'incr', 'ping']
     command: 'redis-server --save 120 1 --loglevel warning'
     networks:
-      - assignment-network
+      - nestjs-network
 
   prometheus:
     image: prom/prometheus:v3.0.1
-    container_name: assignment-prometheus
+    container_name: nestjs-prometheus
     restart: unless-stopped
     ports:
       - ${DOCKER_PROMETHEUS_PORT}:9090
@@ -56,7 +56,7 @@ services:
     volumes:
       - ./prometheus.config.yml:/etc/prometheus/prometheus.yaml:ro
     networks:
-      - assignment-network
+      - nestjs-network
     profiles:
       - monitoring
     depends_on:
@@ -64,7 +64,7 @@ services:
 
   grafana:
     image: grafana/grafana-oss:11.3.1
-    container_name: assignment-grafana
+    container_name: nestjs-grafana
     restart: unless-stopped
     ports:
       - '${DOCKER_GRAFANA_PORT}:3000'
@@ -75,7 +75,7 @@ services:
       - ./src/tools/grafana/provisioning:/etc/grafana/provisioning
       - ./src/tools/grafana/dashboards:/var/lib/grafana/dashboards
     networks:
-      - assignment-network
+      - nestjs-network
     profiles:
       - monitoring
     depends_on:
@@ -84,13 +84,13 @@ services:
 
   postgres-exporter:
     image: prometheuscommunity/postgres-exporter
-    container_name: assignment-postgres-exporter
+    container_name: nestjs-postgres-exporter
     ports:
       - ${DOCKER_PG_EXPORTER}:9187
     environment:
       DATA_SOURCE_NAME: 'postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}?sslmode=${DATABASE_SSL_MODE:-disable}'
     networks:
-      - assignment-network
+      - nestjs-network
     profiles:
       - monitoring
     depends_on:
@@ -99,7 +99,7 @@ services:
   # Solution to fix prometheus volume permission issue
   setup_prometheus:
     image: prom/prometheus:v3.0.1
-    container_name: assignment-setup-prometheus
+    container_name: nestjs-setup-prometheus
     restart: no
     user: root
     entrypoint:
@@ -115,7 +115,7 @@ services:
   # Solution to fix grafana volume permission issue
   setup_grafana:
     image: grafana/grafana-oss:11.3.1
-    container_name: assignment-setup-grafana
+    container_name: nestjs-setup-grafana
     restart: no
     user: root
     entrypoint:
@@ -129,6 +129,6 @@ services:
       - monitoring
 
 networks:
-  assignment-network:
-    name: assignment-network
+  nestjs-network:
+    name: nestjs-network
     driver: bridge

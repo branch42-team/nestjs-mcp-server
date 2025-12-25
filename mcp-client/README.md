@@ -20,11 +20,13 @@ Interactive command-line interface for querying course content via the Model Con
 ## Installation
 
 1. Navigate to the client directory:
+
 ```bash
 cd mcp-client
 ```
 
 2. Install dependencies:
+
 ```bash
 npm install
 # or
@@ -34,14 +36,16 @@ bun install
 ```
 
 3. Create `.env` file with your API key:
+
 ```bash
 cp .env.example .env
 ```
 
 4. Edit `.env` and add your API key:
+
 ```env
 MCP_API_KEY=epck_your_api_key_here
-MCP_SERVER_CONTAINER=assignment-mcp
+MCP_SERVER_CONTAINER=nestjs-mcp
 ```
 
 ## Getting an API Key
@@ -49,22 +53,27 @@ MCP_SERVER_CONTAINER=assignment-mcp
 You need to create an API key through the REST API:
 
 1. Start the main application:
+
 ```bash
 cd ..
 pnpm docker:dev:up
 ```
 
 2. Sign in or create an account via Swagger UI:
+
    - Open http://localhost:3000/swagger
    - Use `/api/auth/sign-up/email` or `/api/auth/sign-in/email`
 
 3. Create an API key:
+
    - Call `POST /api/v1/user/api-keys` with:
+
    ```json
    {
      "name": "MCP Client Key"
    }
    ```
+
    - Copy the returned `key` value (only shown once!)
 
 4. Add the key to your `.env` file
@@ -171,9 +180,11 @@ The CLI automatically enforces these permissions based on your API key.
 **Error: Failed to connect to MCP server**
 
 Solution:
+
 1. Check if MCP server is running:
+
    ```bash
-   docker ps | grep assignment-mcp
+   docker ps | grep nestjs-mcp
    ```
 
 2. Start the server if needed:
@@ -187,6 +198,7 @@ Solution:
 **Error: Invalid or expired API key**
 
 Solution:
+
 1. Verify your API key in `.env`
 2. Create a new API key if needed (keys can expire)
 3. Ensure the key starts with `epck_`
@@ -196,6 +208,7 @@ Solution:
 **"No courses found"**
 
 Possible causes:
+
 - You're not enrolled in any courses (regular users)
 - Ask an admin to enroll you in courses
 - Check if courses exist in the system
@@ -257,12 +270,12 @@ The client uses the Model Context Protocol (MCP) SDK to communicate with the ser
 ## Support
 
 For issues or questions:
+
 1. Check the main project documentation
 2. Verify your API key is valid
 3. Ensure MCP server is running
-4. Check Docker logs: `docker logs assignment-mcp`
+4. Check Docker logs: `docker logs nestjs-mcp`
 
 ## License
 
 MIT
-

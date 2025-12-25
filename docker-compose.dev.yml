@@ -38,7 +38,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.dev
-    container_name: assignment-mcp
+    container_name: nestjs-mcp
     volumes:
       - /app/node_modules
       - .:/app
@@ -47,7 +47,7 @@ services:
       - IS_MCP=true
       - DATABASE_HOST=database
       - REDIS_HOST=redis
-      - MCP_SERVER_NAME=epicode-course-mcp
+      - MCP_SERVER_NAME=nestjs-mcp
       - MCP_SERVER_VERSION=1.0.0
     depends_on:
       - database
@@ -59,7 +59,7 @@ services:
 
   database:
     image: pgvector/pgvector:pg17
-    container_name: assignment-postgres
+    container_name: nestjs-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: '${DATABASE_USERNAME}'
@@ -72,11 +72,11 @@ services:
       - ./.docker/postgres_data:/var/lib/postgresql/data
       - ./scripts/init-pgvector.sh:/docker-entrypoint-initdb.d/init-pgvector.sh:ro
     networks:
-      - assignment-network
+      - nestjs-network
 
   mail:
     image: axllent/mailpit:v1.25
-    container_name: assignment-mail
+    container_name: nestjs-mail
     restart: unless-stopped
     build:
       context: .
@@ -85,4 +85,4 @@ services:
       - ${DOCKER_MAIL_PORT}:1025
       - ${DOCKER_MAIL_CLIENT_PORT}:8025
     networks:
-      - assignment-network
+      - nestjs-network
