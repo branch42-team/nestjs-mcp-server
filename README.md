@@ -21,6 +21,8 @@
 
 A comprehensive, production-ready **NestJS template** that combines modern backend architecture with AI capabilities through the **Model Context Protocol (MCP)**. Perfect for building intelligent applications, LMS platforms, content management systems, or any project requiring semantic search and AI integration.
 
+> **Note**: This template extends [ultimate-nestjs-boilerplate](https://github.com/niraj-khatiwada/ultimate-nestjs-boilerplate) by [@niraj-khatiwada](https://github.com/niraj-khatiwada) with MCP server, RAG pipeline, and AI capabilities. All credits for the excellent foundation go to the original author.
+
 ### What Makes This Different?
 
 - 🤖 **Built-in MCP Server**: Expose your data to AI agents with standardized protocol
@@ -544,6 +546,12 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 🙏 Acknowledgments
 
+This template is built upon the excellent foundation of:
+
+- **[ultimate-nestjs-boilerplate](https://github.com/niraj-khatiwada/ultimate-nestjs-boilerplate)** by [@niraj-khatiwada](https://github.com/niraj-khatiwada) - Advanced Nest.js boilerplate for scalable startups. This template extends the original boilerplate with MCP server, RAG pipeline, and AI capabilities.
+
+### Additional Credits
+
 - [NestJS](https://nestjs.com/) - Progressive Node.js framework
 - [Better Auth](https://www.better-auth.com/) - Modern authentication
 - [Model Context Protocol](https://modelcontextprotocol.io/) - AI agent protocol
@@ -561,6 +569,8 @@ If you find this template useful, please consider giving it a star ⭐
 <div align="center">
 
 **Built with ❤️ by [Branch42 Team](https://github.com/branch42-team)**
+
+**Based on [ultimate-nestjs-boilerplate](https://github.com/niraj-khatiwada/ultimate-nestjs-boilerplate) by [@niraj-khatiwada](https://github.com/niraj-khatiwada)**
 
 [Report Bug](https://github.com/branch42-team/nestjs-mcp-server/issues) • [Request Feature](https://github.com/branch42-team/nestjs-mcp-server/issues)
 

@@ -5,6 +5,10 @@
   "author": "Branch42 Team",
   "private": false,
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/branch42-team/nestjs-mcp-server.git"
+  },
   "scripts": {
     "start": "concurrently -n api,email -c cyan,green 'nest start' 'pnpm email:build'",
     "start:dev": "concurrently -n api,email -c cyan,green 'nest start --watch' 'pnpm email:watch'",
